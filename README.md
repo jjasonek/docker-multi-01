@@ -1,3 +1,5 @@
+## example dockerizing FE, BE and DB into 3 docker containers.
+
 ## Exposing port 27017 to localhost -p 27017:27017 we ensure that not dockerized BE
 ## is able to connect to the localhost:20017
 

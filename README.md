@@ -60,6 +60,32 @@ To create a production build, use npm run build.
 webpack compiled successfully
 
 
+## So now our containers communicate through our **localhost** machine, because ve have
+## their **ports published**.
+## Let's make it better using the docker network
 
+docker stop goals-frontend goals-backend mongodb
 
+docker network create goals-net
 
+docker network ls              
+NETWORK ID     NAME            DRIVER    SCOPE
+edffa3a59832   bridge          bridge    local
+8352974c56c2   favorites-net   bridge    local
+**e9c53018ead8   goals-net       bridge    local**
+57a477632d1e   host            host      local
+e462d5990d80   none            null      local
+
+docker run --name mongodb --rm -d --network goals-net mongo
+
+docker build -t goals-node .
+docker run --name goals-backend --rm -d --network goals-net goals-node
+
+docker build -t goals-react .
+docker run --name goals-frontend -d --rm --network goals-net -p 3000:3000 goals-react
+
+## now we have error from FE dev tools console:
+Failed to load resource: net::ERR_NAME_NOT_RESOLVED
+goals-backend/goals:1
+## The reason is, that the React runs in a browser, not container. And the browser has no idea 
+## about docker network, hence "goals-backend"

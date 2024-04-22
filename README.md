@@ -87,5 +87,17 @@ docker run --name goals-frontend -d --rm --network goals-net -p 3000:3000 goals-
 ## now we have error from FE dev tools console:
 Failed to load resource: net::ERR_NAME_NOT_RESOLVED
 goals-backend/goals:1
-## The reason is, that the React runs in a browser, not container. And the browser has no idea 
+## The reason is, that the React runs in a **browser**, not container. And the browser has no idea 
 ## about docker network, hence "goals-backend"
+
+docker stop goals-frontend
+docker stop goals-backend
+
+docker run --name goals-frontend -d --rm -p 3000:3000 goals-react
+docker run --name goals-backend --rm -d --network goals-net -p 80:80 goals-node
+
+docker ps -a                                                                   
+CONTAINER ID   IMAGE         COMMAND                  CREATED         STATUS         PORTS                    NAMES
+38ce33778a3e   goals-node    "docker-entrypoint.s…"   4 seconds ago   Up 3 seconds   0.0.0.0:80->80/tcp       goals-backend
+403adf57eca1   goals-react   "docker-entrypoint.s…"   2 minutes ago   Up 2 minutes   0.0.0.0:3000->3000/tcp   goals-frontend
+56642c6cbc6e   mongo         "docker-entrypoint.s…"   2 hours ago     Up 2 hours     27017/tcp                mongodb

@@ -101,3 +101,9 @@ CONTAINER ID   IMAGE         COMMAND                  CREATED         STATUS    
 38ce33778a3e   goals-node    "docker-entrypoint.s…"   4 seconds ago   Up 3 seconds   0.0.0.0:80->80/tcp       goals-backend
 403adf57eca1   goals-react   "docker-entrypoint.s…"   2 minutes ago   Up 2 minutes   0.0.0.0:3000->3000/tcp   goals-frontend
 56642c6cbc6e   mongo         "docker-entrypoint.s…"   2 hours ago     Up 2 hours     27017/tcp                mongodb
+
+## for database data persistence we will use a named volume
+
+docker stop mongodb
+docker run --name mongodb --rm -d --network goals-net -v data:/data/db mongo
+

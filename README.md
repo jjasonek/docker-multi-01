@@ -107,3 +107,22 @@ CONTAINER ID   IMAGE         COMMAND                  CREATED         STATUS    
 docker stop mongodb
 docker run --name mongodb --rm -d --network goals-net -v data:/data/db mongo
 
+
+## for credentials, we use environment variables
+
+## this part did not work for me until I removed the "data" named volume.
+## I don't know whether it is Windows vs Unix file system problem  
+## or just the database data overridden by those on the volume.
+docker volume ls
+DRIVER    VOLUME NAME
+...
+local     data
+...
+
+docker volume rm data
+
+docker run --name mongodb --rm -d --network goals-net -v data:/data/db -e MONGO_INITDB_ROOT_USERNAME=student -e MONGO_INITDB_ROOT_PASSWORD=secret mongo
+
+docker run --name goals-backend --rm -d --network goals-net -p 80:80 goals-node
+docker logs goals-backend
+CONNECTED TO MONGODB

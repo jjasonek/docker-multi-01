@@ -186,3 +186,16 @@ ENV MONGODB_PASSWORD=secret
 ENV MONGODB_USERNAME root
 ENV MONGODB_PASSWORD secret
 ### Both worked for me.
+
+
+## adding .dockerignore
+docker stop goals-backend
+docker build -t goals-node .
+
+docker run --name goals-backend \
+-v $(pwd):/app -v /app/node_modules \
+-v $(pwd)/logs:/app/logs \
+-e MONGODB_USERNAME=student \
+--rm -d --network goals-net -p 80:80 goals-node
+
+docker exec goals-backend ls -ltr

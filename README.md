@@ -126,3 +126,42 @@ docker run --name mongodb --rm -d --network goals-net -v data:/data/db -e MONGO_
 docker run --name goals-backend --rm -d --network goals-net -p 80:80 goals-node
 docker logs goals-backend
 CONNECTED TO MONGODB
+
+
+## Now we want to persist backend logs and be able to change the backend code.
+## Remember, longer path precedes the shorter, so **app/logs** will survive if we also set **/app**
+## And we also set anonymous volume for the **/app/node_modules** because we need it not to be overwritten by **/app** bind mount 
+## it is sufficient to use named volume for the logs but I want to try to see changing logs.
+
+docker run --name goals-backend \
+-v $(pwd):/app -v /app/node_modules \
+-v $(pwd)/logs:/app/logs \
+--rm -d --network goals-net -p 80:80 goals-node
+### and I can see the logs refreshing locally.
+
+## To allow js code changes during the container is up and running we utilize the **nodemon**.
+
+docker stop goals-backend
+docker build -t goals-node .
+docker run --name goals-backend \
+-v $(pwd):/app -v /app/node_modules \
+-v $(pwd)/logs:/app/logs \
+--rm -d --network goals-net -p 80:80 goals-node
+
+docker logs goals-backend
+> backend@1.0.0 start
+> nodemon app.js
+
+[nodemon] 3.1.0
+[nodemon] to restart at any time, enter `rs`
+[nodemon] watching path(s): *.*
+[nodemon] watching extensions: js,mjs,cjs,json
+[nodemon] starting `node app.js`
+CONNECTED TO MONGODB!!
+TRYING TO FETCH GOALS
+FETCHED GOALS
+TRYING TO DELETE GOAL
+DELETED GOAL
+[nodemon] restarting due to changes...
+[nodemon] starting `node app.js`
+CONNECTED TO MONGODB

@@ -165,3 +165,24 @@ DELETED GOAL
 [nodemon] restarting due to changes...
 [nodemon] starting `node app.js`
 CONNECTED TO MONGODB
+
+
+## Replace hardcoded DB credentials with ENV
+## Note that we enclose the connection string in `` (backtick) instead of ''
+
+docker stop goals-backend
+docker build -t goals-node .
+
+docker run --name goals-backend \
+-v $(pwd):/app -v /app/node_modules \
+-v $(pwd)/logs:/app/logs \
+-e MONGODB_USERNAME=student \
+--rm -d --network goals-net -p 80:80 goals-node
+
+### the lector says that there should be "=" in Dockerfile like>  
+ENV MONGODB_USERNAME=root
+ENV MONGODB_PASSWORD=secret
+### instead of 
+ENV MONGODB_USERNAME root
+ENV MONGODB_PASSWORD secret
+### Both worked for me.

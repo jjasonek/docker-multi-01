@@ -199,3 +199,14 @@ docker run --name goals-backend \
 --rm -d --network goals-net -p 80:80 goals-node
 
 docker exec goals-backend ls -ltr
+
+
+## Frontend interactive code changes
+### We do not need anything like nodemon because react is already ready for this.
+
+$ docker stop goals-frontend
+$ pwd
+/home/jjasonek/Training/Docker/docker-multi-01/multi-01/frontend
+
+$ docker run -v $(pwd)/src:/app/src \
+--name goals-frontend -d --rm -p 3000:3000 goals-react

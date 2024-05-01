@@ -239,3 +239,12 @@ CONTAINER ID   IMAGE               COMMAND                  CREATED          STA
 3bbb7ef75ff1   multi-01-backend    "docker-entrypoint.s…"   50 seconds ago   Up 46 seconds   0.0.0.0:80->80/tcp       multi-01-backend-1
 7879e12fdf2c   mongo               "docker-entrypoint.s…"   50 seconds ago   Up 46 seconds   27017/tcp                multi-01-mongodb-1
 $ docker compose down
+
+
+$ docker compose up -d
+
+$ docker ps -a
+CONTAINER ID   IMAGE               COMMAND                  CREATED          STATUS         PORTS                    NAMES
+3cdf5c588e7d   multi-01-frondend   "docker-entrypoint.s…"   9 seconds ago    Up 7 seconds   0.0.0.0:3000->3000/tcp   multi-01-frondend-1
+5dbae940267b   multi-01-backend    "docker-entrypoint.s…"   10 seconds ago   Up 8 seconds   0.0.0.0:80->80/tcp       multi-01-backend-1
+68937f1a6305   mongo               "docker-entrypoint.s…"   10 seconds ago   Up 8 seconds   27017/tcp                **mongodb**

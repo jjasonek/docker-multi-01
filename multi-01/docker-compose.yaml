@@ -1,0 +1,45 @@
+services:
+  mongodb:
+    image: 'mongo'
+    volumes:
+      - data:/data/db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: student
+      MONGO_INITDB_ROOT_PASSWORD: secret
+      # MONGO_INITDB_ROOT_PASSWORD=secret
+#      env_file:
+#        - ./env/mongo.env
+
+  backend:
+    build: ./backend
+#    build:
+#      context: ./backend
+#      dockerfile: Dockerfile
+#      args:
+#        some_arg: value
+    ports:
+      - '80:80'
+    volumes:
+      - logs:/app/logs    # named
+      - ./backend:/app    # bind mount
+      - /app/node_modules # anonymous
+    env_file:
+      - ./env/backend.env
+    depends_on:
+      - mongodb
+  frondend:
+    build: ./frontend
+    ports:
+      - '3000:3000'
+    volumes:
+      - ./frontend/src:/app/src
+    # following 2 rows are the same effect as -it flag
+    stdin_open: true
+    tty: true
+    depends_on:
+      - backend
+
+# We should do this for the named volumes to inform the Docker about named volumes.
+volumes:
+  data:
+  logs:

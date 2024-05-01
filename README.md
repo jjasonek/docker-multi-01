@@ -210,3 +210,32 @@ $ pwd
 
 $ docker run -v $(pwd)/src:/app/src \
 --name goals-frontend -d --rm -p 3000:3000 goals-react
+
+
+## Docker compose
+
+$ docker compose up
+$ docker compose up -d
+
+$ docker compose down
+$ docker image prune -a
+
+## names defined in **services** are used as a part of container names
+## but they are still identify containers in the **network** so there is no need to rename earlier defined links in my code.
+## there is keys providing the -it "behaviour" for the frontend though in my case the FE works even without this flag. 
+
+$ docker compose up
+$ docker ps -a
+CONTAINER ID   IMAGE              COMMAND                  CREATED              STATUS              PORTS                NAMES
+9755253308ed   multi-01-backend   "docker-entrypoint.s…"   About a minute ago   Up About a minute   0.0.0.0:80->80/tcp   multi-01-backend-1
+6c5121d6c7da   mongo              "docker-entrypoint.s…"   About a minute ago   Up About a minute   27017/tcp            multi-01-mongodb-1
+
+$ docker compose down
+
+$ docker compose up -d
+$ docker ps -a
+CONTAINER ID   IMAGE               COMMAND                  CREATED          STATUS          PORTS                    NAMES
+19eab34faf50   multi-01-frondend   "docker-entrypoint.s…"   48 seconds ago   Up 45 seconds   0.0.0.0:3000->3000/tcp   multi-01-frondend-1
+3bbb7ef75ff1   multi-01-backend    "docker-entrypoint.s…"   50 seconds ago   Up 46 seconds   0.0.0.0:80->80/tcp       multi-01-backend-1
+7879e12fdf2c   mongo               "docker-entrypoint.s…"   50 seconds ago   Up 46 seconds   27017/tcp                multi-01-mongodb-1
+$ docker compose down
